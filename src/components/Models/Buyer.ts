@@ -1,67 +1,69 @@
-import {IBuyer,TPayment} from "../../types/index"
-export class Buyer{
-    private _payment: TPayment | null=null;
-    private _email: string="";
-    private _phone: string="";
-    private _address: string="";
-    constructor(){};
-    setData(field: string, value: string): void{
-        switch(field){
+import { IBuyer, TPayment } from "../../types/index";
+
+export class Buyer {
+    private payment: TPayment = "";
+    private email: string = "";
+    private phone: string = "";
+    private address: string = "";
+
+    constructor() {}
+
+    setData(field: string, value: string): void {
+        switch (field) {
             case 'payment':
-                if (value === 'card' || value === 'cash') {
-                    this._payment = value as TPayment;
+                if (value === 'online' || value === 'cash') {
+                    this.payment = value as TPayment;
                 } else {
-                throw new Error(`Invalid payment type: ${value}`);
+                    this.payment ='';
                 }
-                
                 break;
             case 'email':
-                this._email=value;
+                this.email = value;
                 break;
             case 'phone':
-                this._phone=value;
+                this.phone = value;
                 break;
             case 'address':
-                this._address=value;
+                this.address = value;
                 break;
         }
     }
-    getData(): IBuyer{
-        if (this._payment === null) {
-            throw new Error('Payment method is not set');
-        }
+
+    getData(): IBuyer {        
         return {
-        payment: this._payment,
-        email: this._email.trim(),
-        phone: this._phone.trim(),
-        address: this._address.trim()
+            payment: this.payment,
+            email: this.email.trim(),
+            phone: this.phone.trim(),
+            address: this.address.trim()
         };
     }
-    clear(): void{
-        this._payment = null;
-        this._email = '';
-        this._phone = '';
-        this._address = '';
+
+    clear(): void {
+        this.payment = "";
+        this.email = '';
+        this.phone = '';
+        this.address = '';
     }
-  validate(): Partial<Record<keyof IBuyer, string>> {
-    const errors: Partial<Record<keyof IBuyer, string>> = {};
-    
-    if (this._payment === null) {
-      errors.payment = 'Не выбран способ оплаты';
+
+    validate(): Partial<Record<keyof IBuyer, string>> {
+        const errors: Partial<Record<keyof IBuyer, string>> = {};
+        
+        if (this.payment === '') {
+            errors.payment = 'Не выбран способ оплаты';
+        }
+        
+        if (!this.email.trim()) {
+            errors.email = 'Email не может быть пустым';
+        }
+        
+        if (!this.phone.trim()) {
+            errors.phone = 'Телефон не может быть пустым';
+        }
+        
+        if (!this.address.trim()) {
+            errors.address = 'Адрес не может быть пустым';
+        }
+        
+        return errors;
     }
-    
-    if (!this._email.trim()) {
-      errors.email = 'Email не может быть пустым';
-    }
-    
-    if (!this._phone.trim()) {
-      errors.phone = 'Телефон не может быть пустым';
-    }
-    
-    if (!this._address.trim()) {
-      errors.address = 'Адрес не может быть пустым';
-    }
-    
-    return errors;
-  }
 }

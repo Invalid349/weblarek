@@ -2,6 +2,7 @@ import './scss/styles.scss';
 import {ProductCatalog} from "./components/Models/ProductCatalog.ts";
 import {Cart} from "./components/Models/Cart.ts";
 import {Buyer} from "./components/Models/Buyer.ts";
+import {API_URL} from "./utils/constants.ts"
 import { Api } from './components/base/Api.ts';
 import {ApiService} from "./components/communication/ApiService.ts"
 import {apiProducts} from "./utils/data.ts";
@@ -94,7 +95,7 @@ console.log('Ошибки валидации:', invalidValidation);
 
 // Тест api
 
-const api = new Api('https://larek-api.nomoreparties.co/api/weblarek', {
+const api = new Api(API_URL,{
   headers: {
     'Content-Type': 'application/json'
   }

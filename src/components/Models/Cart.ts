@@ -1,28 +1,36 @@
 import {IProduct} from "../../types/index"
 export class Cart{
-    private _items: IProduct[]=[];
+    private items: IProduct[]=[];
+
     constructor(){};
+
     getItems(): IProduct[]{
-        return this._items;
+        return this.items;
     }
+
     addItem(item: IProduct): void {
-        this._items.push({...item});
+        this.items.push({...item});
     }
+
     removeItem(id: string): void {
-        this._items = this._items.filter(item => item.id !== id);
+        this.items = this.items.filter(item => item.id !== id);
     }
+
     clear(): void{
-        this._items = [];
+        this.items = [];
     }
+
     getTotal(): number {
-        return this._items.reduce((total, item) => {
+        return this.items.reduce((total, item) => {
         return item.price !== null ? total + item.price : total;
         }, 0);
     }
+
     getCount(): number{
-        return this._items.length;
+        return this.items.length;
     }
+    
     hasItem(id: string): boolean {
-        return this._items.some(item => item.id === id);
+        return this.items.some(item => item.id === id);
     }
 }
