@@ -7,11 +7,11 @@ interface IBasket {
     basketPrice: number;
 }
 export class Basket extends Component<IBasket> {
-    protected basketListElement: HTMLElement;
-    protected basketButton: HTMLButtonElement;
-    protected basketPriceElement: HTMLElement;
+    private basketListElement: HTMLElement;
+    private basketButton: HTMLButtonElement;
+    private basketPriceElement: HTMLElement;
 
-    constructor(protected events: IEvents, container: HTMLElement){
+    constructor(private events: IEvents, container: HTMLElement){
         super(container);
 
         this.basketListElement = ensureElement<HTMLElement>('.basket__list', this.container);
@@ -19,9 +19,6 @@ export class Basket extends Component<IBasket> {
         this.basketButton = ensureElement<HTMLButtonElement>('.basket__button', this.container);
 
         this.basketButton.addEventListener('click', ()=> {
-            if (this.basketButton.disabled) {
-                return;
-            }
             this.events.emit('orderForm:open');
         });
     }

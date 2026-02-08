@@ -11,11 +11,11 @@ interface IOrderForm extends IForm {
 }
 
 export class OrderForm extends Form implements IOrderForm{
-    protected cardButton: HTMLButtonElement;
-    protected cashButton: HTMLButtonElement;
-    protected formInputElement: HTMLInputElement;
+    private cardButton: HTMLButtonElement;
+    private cashButton: HTMLButtonElement;
+    private formInputElement: HTMLInputElement;
 
-    constructor(protected events: IEvents, container: HTMLElement){
+    constructor(private events: IEvents, container: HTMLElement){
         super(container);
 
         this.cardButton = ensureElement<HTMLButtonElement>('button[name="card"]', this.container);

@@ -6,10 +6,10 @@ interface IHeader {
     counter: number;
 }
 export class Header extends Component<IHeader> {
-    protected counterElement: HTMLElement;
-    protected basketButton: HTMLButtonElement;
+    private counterElement: HTMLElement;
+    private basketButton: HTMLButtonElement;
 
-    constructor(protected events: IEvents, container: HTMLElement){
+    constructor(private events: IEvents, container: HTMLElement){
         super(container);
 
         this.counterElement = ensureElement<HTMLElement>('.header__basket-counter', this.container);

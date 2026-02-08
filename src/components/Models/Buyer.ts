@@ -73,27 +73,25 @@ export class Buyer{
         });
     }
 
-  validate(): Partial<Record<keyof IBuyer, string>> {
-    const errors: Partial<Record<keyof IBuyer, string>> = {};
-    
-    if (!this._email.trim() && !this._phone.trim()){
-        errors.email = 'Необходимо заполнить email и телефон';
-        errors.phone = 'Необходимо заполнить телефон и email';
-    } else if (!this._email.trim()) {
-        errors.email = 'Email не может быть пустым';
-    } else if (!this._phone.trim()) {
-        errors.phone = 'Телефон не может быть пустым';
-    }
-    
-    if (!this._payment === null && !this._address.trim()){
-        errors.payment = 'Необходимо заполнить оплату и адресс';
-        errors.address = 'Необходимо заполнить адресс и оплату';
-    } else if (this._payment === null) {
-        errors.payment = 'Не выбран способ оплаты';
-    } else if (!this._address.trim()) {
-        errors.address = 'Необходимо указать адрес';
-    }
+    validate(): Partial<Record<keyof IBuyer, string>> {
+        const errors: Partial<Record<keyof IBuyer, string>> = {};
 
-    return errors;
-  }
+        if (this._payment === null) {
+            errors.payment = 'Не выбран способ оплаты';
+        }
+        
+        if (!this._email.trim()) {
+            errors.email = 'Email не может быть пустым';
+        }
+        
+        if (!this._phone.trim()) {
+            errors.phone = 'Телефон не может быть пустым';
+        }
+        
+        if (!this._address.trim()) {
+            errors.address = 'Адрес не может быть пустым';
+        }
+        
+        return errors;
+    }
 }

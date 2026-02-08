@@ -9,17 +9,18 @@ interface IContactsForm extends IForm {
 }
 
 export class ContactsForm extends Form implements IContactsForm{
-    protected formInputEmailElements: HTMLInputElement;
-    protected formInputPhoneElements: HTMLInputElement;
+    private formInputEmailElements: HTMLInputElement;
+    private formInputPhoneElements: HTMLInputElement;
 
-    constructor(protected events: IEvents, container: HTMLElement){
+    constructor(private events: IEvents, container: HTMLElement){
         super(container);
 
         this.formInputEmailElements = ensureElement<HTMLInputElement>('input[name="email"]', this.container);
         this.formInputPhoneElements = ensureElement<HTMLInputElement>('input[name="phone"]', this.container);
 
-        this.formButton.addEventListener('click', ()=> {
-            this.events.emit('success:open');
+        this.formButton.addEventListener('click', (event)=> {
+            event.preventDefault();
+            this.events.emit('contactsForm:submit');
         });
 
         this.formInputEmailElements.addEventListener('input', (event) => {

@@ -8,11 +8,11 @@ interface IBasketCard extends ICard {
 }
 
 export class BasketCard extends Card  implements IBasketCard {
-    protected cardDeleteButton: HTMLButtonElement;
-    protected cardIndexElement: HTMLElement;
+    private cardDeleteButton: HTMLButtonElement;
+    private cardIndexElement: HTMLElement;
 
 
-    constructor(protected events: IEvents, container: HTMLElement, private deleteButton?: () => void){
+    constructor(protected events: IEvents, container: HTMLElement, private deleteButtonClick?: () => void){
         super(container);
 
         this.cardDeleteButton = ensureElement<HTMLButtonElement>('.basket__item-delete', this.container);
@@ -20,8 +20,8 @@ export class BasketCard extends Card  implements IBasketCard {
 
         
         this.cardDeleteButton.addEventListener('click', ()=> {
-            if (this.deleteButton) {
-                this.deleteButton();
+            if (this.deleteButtonClick) {
+                this.deleteButtonClick();
             }
         });
     }

@@ -11,11 +11,11 @@ export interface IGalleryCard extends ICard {
 }
 
 export class GalleryCard extends Card  implements IGalleryCard {
-    protected cardImageElement: HTMLImageElement;
-    protected cardCategoryElement: HTMLElement;
-    protected cardButton: HTMLButtonElement;
+    private cardImageElement: HTMLImageElement;
+    private cardCategoryElement: HTMLElement;
+    private cardButton: HTMLButtonElement;
 
-    constructor(protected events: IEvents, container: HTMLElement, private onClick?: () => void){
+    constructor(protected events: IEvents, container: HTMLElement, private setPreviewButtonClick?: () => void){
         super(container);
 
         this.cardImageElement = ensureElement<HTMLImageElement>('.card__image', this.container);
@@ -23,8 +23,8 @@ export class GalleryCard extends Card  implements IGalleryCard {
         this.cardButton = container as HTMLButtonElement;
 
         this.cardButton.addEventListener('click', () => {
-            if (this.onClick) {
-                this.onClick();
+            if (this.setPreviewButtonClick) {
+                this.setPreviewButtonClick();
             }
         });
     }

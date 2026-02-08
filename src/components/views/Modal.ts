@@ -6,10 +6,10 @@ interface IModal {
     content:HTMLElement;
 }
 export class Modal extends Component<IModal> {
-    protected closeButton: HTMLButtonElement;
-    protected modalContent:HTMLElement;
+    private closeButton: HTMLButtonElement;
+    private modalContent:HTMLElement;
 
-    constructor(protected events: IEvents, container: HTMLElement){
+    constructor(private events: IEvents, container: HTMLElement){
         super(container);
 
         this.closeButton = ensureElement<HTMLButtonElement>('.modal__close', container);
@@ -24,5 +24,13 @@ export class Modal extends Component<IModal> {
         if (item) {
             this.modalContent.replaceChildren(item);
         }
+    }
+
+    open(): void {
+        this.container.classList.add('modal_active');
+    }
+
+    close(): void {
+        this.container.classList.remove('modal_active');
     }
 }

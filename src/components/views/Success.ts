@@ -6,10 +6,10 @@ interface ISuccess {
     counter: number;
 }
 export class Success extends Component<ISuccess> {
-    protected counterElement: HTMLElement;
-    protected successButton: HTMLButtonElement;
+    private counterElement: HTMLElement;
+    private successButton: HTMLButtonElement;
 
-    constructor(protected events: IEvents, container: HTMLElement){
+    constructor(private events: IEvents, container: HTMLElement){
         super(container);
 
         this.counterElement = ensureElement<HTMLElement>('.order-success__description', this.container);

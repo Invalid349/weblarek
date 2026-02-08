@@ -6,16 +6,18 @@ import { IGalleryCard } from "./GalleryCard"
 
 interface IPreviewCard extends IGalleryCard {
     cardText: string;
+    cardButtonText: string;
+    cardButtonDisabled: boolean;
 }
 
 export class PreviewCard extends Card  implements IPreviewCard {
-    protected cardImageElement: HTMLImageElement;
-    protected cardCategoryElement: HTMLElement;
-    protected cardTextElement: HTMLElement;
-    protected cardButton: HTMLButtonElement;
+    private cardImageElement: HTMLImageElement;
+    private cardCategoryElement: HTMLElement;
+    private cardTextElement: HTMLElement;
+    private cardButton: HTMLButtonElement;
 
 
-    constructor(protected events: IEvents, container: HTMLElement, private onBasketToggle?: () => void){
+    constructor(protected events: IEvents, container: HTMLElement, private basketToggleButtonClick?: () => void){
         super(container);
 
         this.cardImageElement = ensureElement<HTMLImageElement>('.card__image', this.container);
@@ -25,8 +27,8 @@ export class PreviewCard extends Card  implements IPreviewCard {
 
         
         this.cardButton.addEventListener('click', ()=> {
-            if (this.onBasketToggle) {
-                this.onBasketToggle();
+            if (this.basketToggleButtonClick) {
+                this.basketToggleButtonClick();
             }
         });
     }
@@ -56,12 +58,11 @@ export class PreviewCard extends Card  implements IPreviewCard {
         this.cardTextElement.textContent = value;
     }
     
-    set cardButtonLabel(value: string) {
-        if(value === 'Недоступно') {
-            this.cardButton.disabled = true;
-        } else {
-            this.cardButton.disabled = false;
-        }
+    set cardButtonText(value: string) {
         this.cardButton.textContent = value;
+    }
+
+    set cardButtonDisabled(value: boolean) {
+        this.cardButton.disabled = value;
     }
 }
