@@ -1,31 +1,35 @@
 import {IProduct} from "../../types/index"
-export class ProductCatalog {
-  private items: IProduct[] = [];
-  private preview: IProduct | null = null;
+import { IEvents } from "../base/Events";
 
-  constructor() {};
+export class ProductCatalog {
+  private _items: IProduct[] = [];
+  private _preview: IProduct | null = null;
+
+  constructor(private events: IEvents) {}
 
   setItems(items: IProduct[]): void {
-    this.items = items;
+    this._items = items;
+    this.events.emit('catalog:changed', { items: this._items });
   }
 
   getItems(): IProduct[] {
-    return this.items;
+    return this._items;
   }
 
   getItemById(id: string): IProduct | undefined {
-    return this.items.find(item => item.id === id);
+    return this._items.find(item => item.id === id);
   }
 
   setPreview(item: IProduct): void {
-    if(this.items.find(item => item === item)){
-      this.preview = item;
+    if(this._items.find(item => item === item)){
+      this._preview = item;
+      this.events.emit('catalog:preview-changed', { item: this._preview });
     } else{
       throw("Товара нет в каталоге");
     }
-    
   }
+
   getPreview(): IProduct | null {
-    return this.preview;
+    return this._preview;
   }
 }

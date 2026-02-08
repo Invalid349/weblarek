@@ -1,69 +1,99 @@
-import { IBuyer, TPayment } from "../../types/index";
+import {IBuyer,TPayment} from "../../types/index"
+import { IEvents } from "../base/Events";
 
-export class Buyer {
-    private payment: TPayment = "";
-    private email: string = "";
-    private phone: string = "";
-    private address: string = "";
+export class Buyer{
+    private _payment: TPayment | null=null;
+    private _email: string="";
+    private _phone: string="";
+    private _address: string="";
 
-    constructor() {}
+    constructor(private events: IEvents){};
 
     setData(field: string, value: string): void {
-        switch (field) {
+        switch(field){
             case 'payment':
                 if (value === 'online' || value === 'cash') {
-                    this.payment = value as TPayment;
+                    this._payment = value as TPayment;
                 } else {
-                    this.payment ='';
+                    throw new Error(`Invalid payment type: ${value}`);
                 }
                 break;
             case 'email':
-                this.email = value;
+                this._email = value;
                 break;
             case 'phone':
-                this.phone = value;
+                this._phone = value;
                 break;
             case 'address':
-                this.address = value;
+                this._address = value;
                 break;
         }
+        
+        let data = null;
+        try {
+            data = this.getData();
+        } catch (error) {
+            data = {
+                payment: this._payment,
+                email: this._email.trim(),
+                phone: this._phone.trim(),
+                address: this._address.trim()
+            };
+        }
+        
+        this.events.emit('buyer:changed', {
+            data: data
+        });
     }
 
-    getData(): IBuyer {        
+    getData(): IBuyer{
+        if (this._payment === null) {
+            throw new Error('Payment method is not set');
+        }
         return {
-            payment: this.payment,
-            email: this.email.trim(),
-            phone: this.phone.trim(),
-            address: this.address.trim()
+        payment: this._payment,
+        email: this._email.trim(),
+        phone: this._phone.trim(),
+        address: this._address.trim()
         };
     }
 
-    clear(): void {
-        this.payment = "";
-        this.email = '';
-        this.phone = '';
-        this.address = '';
+    clear(): void{
+        this._payment = null;
+        this._email = '';
+        this._phone = '';
+        this._address = '';
+        this.events.emit('buyer:changed', {
+            data: {
+                payment: null,
+                email: '',
+                phone: '',
+                address: ''
+        }
+        });
     }
 
-    validate(): Partial<Record<keyof IBuyer, string>> {
-        const errors: Partial<Record<keyof IBuyer, string>> = {};
-        
-        if (this.payment === '') {
-            errors.payment = 'Не выбран способ оплаты';
-        }
-        
-        if (!this.email.trim()) {
-            errors.email = 'Email не может быть пустым';
-        }
-        
-        if (!this.phone.trim()) {
-            errors.phone = 'Телефон не может быть пустым';
-        }
-        
-        if (!this.address.trim()) {
-            errors.address = 'Адрес не может быть пустым';
-        }
-        
-        return errors;
+  validate(): Partial<Record<keyof IBuyer, string>> {
+    const errors: Partial<Record<keyof IBuyer, string>> = {};
+    
+    if (!this._email.trim() && !this._phone.trim()){
+        errors.email = 'Необходимо заполнить email и телефон';
+        errors.phone = 'Необходимо заполнить телефон и email';
+    } else if (!this._email.trim()) {
+        errors.email = 'Email не может быть пустым';
+    } else if (!this._phone.trim()) {
+        errors.phone = 'Телефон не может быть пустым';
     }
+    
+    if (!this._payment === null && !this._address.trim()){
+        errors.payment = 'Необходимо заполнить оплату и адресс';
+        errors.address = 'Необходимо заполнить адресс и оплату';
+    } else if (this._payment === null) {
+        errors.payment = 'Не выбран способ оплаты';
+    } else if (!this._address.trim()) {
+        errors.address = 'Необходимо указать адрес';
+    }
+
+    return errors;
+  }
 }
